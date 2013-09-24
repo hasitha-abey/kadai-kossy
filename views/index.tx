@@ -1,0 +1,14 @@
+: cascade base
+: around content -> {
+<h1><: $greeting :> <: $c.stash.site_name :></h1>
+<form name="input" action="#" method="post">
+Inputs: <input type="text" name="text">
+<input type="submit" value="Send">
+</form>
+:for $entries->$entry{
+	<p><:$entry.id:></p>
+	<p><:$entry.body:></p>
+:}
+
+: }
+
