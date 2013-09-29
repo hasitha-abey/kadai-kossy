@@ -3,7 +3,9 @@
 : around content -> {
 
 <p>
-	Contents of Task:<: $entry.id :>
+	:for $entries->$entry{
+	Search Results for:<: $entry.task :>
+	:}
 </p>
 
 <p>
@@ -22,5 +24,8 @@
 	:}
 	</table>
 </p>
+<form name="input" action="/" method="get">
+	<input type="submit" value="Ok">
+</form>
 
 : }

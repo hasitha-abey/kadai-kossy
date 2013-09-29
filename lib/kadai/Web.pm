@@ -98,8 +98,8 @@ post '/search' => sub {
     my ( $self, $c )  = @_;
     my $search = $c->req->param('search');
     my $entry= $self->dbh->select_all(
-        q{SELECT * FROM entry WHERE task=?;},
-        $search
+        q{SELECT * FROM entry WHERE task LIKE ?;},
+        '%'.$search.'%'
         );
 
     $c->render('search.tx', {entries => $entry});
