@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+: cascade base
+: around content -> {
+
+<p>
+	Add Changes to Task:<: $entry.id :>
+</p>
+
+<form method="post" action="/change/<: $entry.id :>">
+<input name="change" value="<: $entry.task :>" />
+<input type="submit" value="Change Task" />
+</form>
+
+
+: }

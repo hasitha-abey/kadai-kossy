@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+: cascade base
+: around content -> {
+
+<p>
+	Contents of Task:<: $entry.id :>
+</p>
+
+<p>
+<table border="1">
+	<tr>
+	<th>Task NO</th>
+	<th>Task</th>
+	<th>Date-Time</th>
+	</tr>
+	:for $entries->$entry{
+	<tr>
+	<td><:$entry.id:></td>
+	<td><:$entry.task:></td>
+	<td><:$entry.date:></td>
+	</tr>
+	:}
+	</table>
+</p>
+
+: }

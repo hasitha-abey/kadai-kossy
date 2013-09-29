@@ -1,14 +1,51 @@
 : cascade base
 : around content -> {
 <h1><: $greeting :> <: $c.stash.site_name :></h1>
-<form name="input" action="#" method="post">
-Inputs: <input type="text" name="text">
-<input type="submit" value="Send">
+
+<form name="input" action="/add" method="post">
+Date Time: <input type="text" name="date"><br/>
+Task: <input type="text" name="task">
+
+<input type="submit" value="Add">
 </form>
-:for $entries->$entry{
-	<p><:$entry.id:></p>
-	<p><:$entry.body:></p>
-:}
+<h4>Task List</h4>
+<p>
+<table border="1">
+	<tr>
+	<th>Task NO</th>
+	<th>Task</th>
+	<th>Date-Time</th>
+	</tr>
+
+	:for $entries->$entry{
+	<tr>
+	<td><:$entry.id:></td>
+	<td><:$entry.task:></td>
+	<td><:$entry.date:></td>
+
+	<td text-align:center>
+	<form name="input" action="/changeform/<:$entry.id:>" method="post">
+	<input type="submit" value="Change">
+	</form>
+	</td>
+	
+	
+	<td>
+	<form name="input" action="/erase/<:$entry.id:>" method="post">
+	<input type="submit" color=red value="Erase" >
+	</form>
+	</td>
+
+	</tr>
+	:}
+	</table>
+	</p>
+
+<form name="input" action="/search" method="post">
+<input type="text" name="search">
+<input type="submit" value="Search">
+</form>
+
 
 : }
 
