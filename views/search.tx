@@ -2,18 +2,31 @@
 : cascade base
 : around content -> {
 
+<style>
+
+th
+{
+border:2px solid green;
+text-align:center;
+}
+
+td
+{
+border:1px solid green;
+text-align:center;
+}
+</style>
+
 <p>
-	:for $entries->$entry{
-	Search Results for:<: $entry.task :>
-	:}
+	Search Results:
 </p>
 
 <p>
-<table border="1">
-	<tr>
+<table>
+	<tr bgcolor="#9acd32">
 	<th>Task NO</th>
 	<th>Task</th>
-	<th>Date-Time</th>
+	<th>Dead Line</th>
 	</tr>
 	:for $entries->$entry{
 	<tr>

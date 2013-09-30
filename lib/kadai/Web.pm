@@ -7,6 +7,7 @@ use Kossy;
 use DBIx::Sunny;
 use DBD::mysql;
 use Data::Dumper;
+use DateTime;
 
 sub dbh { 
     my $self = shift;
@@ -18,7 +19,9 @@ sub dbh {
 CREATE TABLE IF NOT EXISTS entry (
     id INTEGER NOT NULL PRIMARY KEY auto_increment,
     task TEXT,
-    date TEXT
+    date TEXT,
+    updatetime datetime NOT NULL DEFAULT NOW(),
+    progress TEXT
 );
 EOF
 return;
@@ -39,7 +42,7 @@ get '/' => sub {
     my ( $self, $c )  = @_;
     my $dbh = $self->dbh;
     my @data = $dbh->select_all(
-        q{SELECT * FROM entry}
+        q{SELECT * FROM entry ORDER BY date}
         );
 
     $c->render('index.tx', { entries => @data });
@@ -50,10 +53,12 @@ post '/add' => sub{
     my ($self, $c) = @_;
     my $task = $c->req->param('task');
     my $date = $c->req->param('date');
+    my $updatetime = $c->req->param('updatetime');
+    my $progress = $c->req->param('progress');
 
     $self->dbh->query(
-        q{INSERT INTO entry (id, task, date) VALUES (NULL,?,?)},
-        $task, $date
+        q{INSERT INTO entry (id, task, date, progress) VALUES (NULL,?,?,?)},
+        $task, $date, $progress
     );
 
     $c->redirect('/');
@@ -84,10 +89,12 @@ post '/changeform/:id' => sub {
 post '/change/:id' => sub{
     my ($self, $c) = @_;
     my $change_id = $c->args->{id};
-    my $task = $c->req->param('change');
+    my $changed_task = $c->req->param('change');
+    my $new_progress = $c->req->param('new_progress');
+    my $new_time = DateTime->now(time_zone=>"local");
     $self->dbh->query(
-        q{UPDATE entry SET  task=? WHERE id=?},
-        $task, $change_id
+        q{UPDATE entry SET  task=?, progress=?, updatetime=? WHERE id=?},
+        $changed_task, $new_progress, $new_time, $change_id
 
     );
 
@@ -98,7 +105,7 @@ post '/search' => sub {
     my ( $self, $c )  = @_;
     my $search = $c->req->param('search');
     my $entry= $self->dbh->select_all(
-        q{SELECT * FROM entry WHERE task LIKE ?;},
+        q{SELECT * FROM entry WHERE task LIKE ? ORDER BY date;},
         '%'.$search.'%'
         );
 

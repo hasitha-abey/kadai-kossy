@@ -2,19 +2,55 @@
 : around content -> {
 <h1><: $greeting :> <: $c.stash.site_name :></h1>
 
-<form name="input" action="/add" method="post">
-Date Time: <input type="text" name="date"><br/>
-Task: <input type="text" name="task">
+<style>
 
+th
+{
+border:2px solid green;
+text-align:center;
+}
+
+td
+{
+border:1px solid green;
+text-align:center;
+}
+</style>
+
+<div <div id="enter" style="background-color:MintCream;width:300px;float:left;">
+<h4>Add new Task</h4>
+<form name="input" action="/add" method="post">
+Date Time: <br/>
+<input type="date" name="date"><br/>
+Task: <br/>
+
+<textarea rows="5" cols="20" name="task">
+</textarea><br/>
+
+Progress: </br>
+
+<select name="progress">
+<option value="0%">0%</option>
+  <option value="25%">25%</option>
+  <option value="50%">50%</option>
+  <option value="75%">75%</option>
+  <option value="100%">100%</option>
+</select>
+
+</br>
 <input type="submit" value="Add">
 </form>
+</div>
+
+<div id="list" style="background-color:MintCream;">
 <h4>Task List</h4>
-<p>
-<table border="1">
-	<tr>
+<table>
+	<tr bgcolor="#9acd32">
 	<th>Task NO</th>
 	<th>Task</th>
-	<th>Date-Time</th>
+	<th>Dead Line</th>
+	<th>Updated at</th>
+	<th>Progress</th>
 	</tr>
 
 	:for $entries->$entry{
@@ -22,29 +58,36 @@ Task: <input type="text" name="task">
 	<td><:$entry.id:></td>
 	<td><:$entry.task:></td>
 	<td><:$entry.date:></td>
+	<td><:$entry.updatetime:></td>
+	<td><:$entry.progress:></td>
 
-	<td text-align:center>
+
+	<td>
 	<form name="input" action="/changeform/<:$entry.id:>" method="post">
-	<input type="submit" value="Change">
+	<input type="submit" style="background-color:LightSkyBlue;" value="Change">
 	</form>
 	</td>
 	
 	
 	<td>
-	<form name="input" action="/erase/<:$entry.id:>" method="post">
-	<input type="submit" color=red value="Erase" >
+	<form name="erase" action="/erase/<:$entry.id:>" method="post">
+	<input type="submit" style="background-color:IndianRed;"  value="Erase" >
 	</form>
 	</td>
 
 	</tr>
 	:}
 	</table>
-	</p>
-
-<form name="input" action="/search" method="post">
+</div>
+ 
+<div id="list" style="background-color:MintCream;float:center;text-align:center;">
+<h4>Search Tasks</h4>
+<form name="search" action="/search" method="post">
 <input type="text" name="search">
 <input type="submit" value="Search">
 </form>
+</div>
+
 
 
 : }
